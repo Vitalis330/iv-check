@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vitalis IV Therapy Questionnaire</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      max-width: 650px;
+      margin: 40px auto;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label, input, select {
+      display: block;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .hidden { display: none; }
+    button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <form id="ivForm">
+      <h2>Vitalis Free Wellness Check</h2>
+
+      <fieldset>
+        <legend>1. How are you feeling overall?</legend>
+        <label><input type="checkbox" name="symptoms" value="fatigue"> Fatigued or low energy</label>
+        <label><input type="checkbox" name="symptoms" value="stress"> Stressed or anxious</label>
+        <label><input type="checkbox" name="symptoms" value="immune"> Getting sick often</label>
+        <label><input type="checkbox" name="symptoms" value="focus"> Trouble focusing</label>
+        <label><input type="checkbox" name="symptoms" value="low_mood"> Low mood</label>
+        <label><input type="checkbox" name="symptoms" value="dehydrated"> Dehydrated</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Describe your current lifestyle</legend>
+        <label>Diet:
+          <select name="diet">
+            <option value="balanced">Balanced</option>
+            <option value="fast_food">Mostly processed</option>
+            <option value="vegetarian">Vegetarian/Vegan</option>
+          </select>
+        </label>
+        <label>Exercise:
+          <select name="exercise">
+            <option value="none">Rarely</option>
+            <option value="moderate">1–2x/week</option>
+            <option value="active">3+ times/week</option>
+            <option value="intense">Athlete/Intense</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Libido & Hormonal Wellness</legend>
+        <label><input type="checkbox" name="libido" value="low_libido"> Low libido</label>
+        <label><input type="checkbox" name="libido" value="performance"> Low performance or drive</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Aging & Skin Concerns</legend>
+        <label><input type="checkbox" name="aging" value="skin"> Dull skin</label>
+        <label><input type="checkbox" name="aging" value="wrinkles"> Fine lines or wrinkles</label>
+        <label><input type="checkbox" name="aging" value="hair"> Hair thinning</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>5. Your Wellness Goals</legend>
+        <label><input type="checkbox" name="goals" value="energy"> More energy</label>
+        <label><input type="checkbox" name="goals" value="immunity"> Stronger immune system</label>
+        <label><input type="checkbox" name="goals" value="glow"> Better skin/hair/nails</label>
+        <label><input type="checkbox" name="goals" value="libido"> Increased libido</label>
+        <label><input type="checkbox" name="goals" value="detox"> Detox/weight loss</label>
+        <label><input type="checkbox" name="goals" value="focus"> Mental clarity</label>
+      </fieldset>
+
+      <label>Name: <input type="text" name="name" required></label>
+      <label>Email: <input type="email" name="email" required></label>
+
+      <button type="submit">Get My Recommendation</button>
+    </form>
+
+    <div id="recommendation" class="hidden">
+      <h3>Your Recommended IV Therapy:</h3>
+      <p id="resultText"></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('ivForm');
+    const recommendationDiv = document.getElementById('recommendation');
+    const resultText = document.getElementById('resultText');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      const symptoms = data.getAll('symptoms');
+      const goals = data.getAll('goals');
+      const libido = data.getAll('libido');
+      const aging = data.getAll('aging');
+
+      let drip = "Hydration Drip";
+
+      if (symptoms.includes("fatigue") && goals.includes("energy")) drip = "Myers Cocktail";
+      if (symptoms.includes("stress") || goals.includes("libido")) drip = "Better Mood Support Drip";
+      if (goals.includes("immunity") || symptoms.includes("immune")) drip = "Immune Support Drip";
+      if (goals.includes("detox")) drip = "Diet & Detox Drip";
+      if (goals.includes("glow") || aging.includes("skin") || aging.includes("hair")) drip = "Rejuvenation Drip";
+      if (libido.includes("low_libido")) drip = "Libido Drip";
+      if (goals.includes("focus") || symptoms.includes("focus")) drip = "Brain Support Drip";
+      if (data.get("exercise") === "intense") drip = "Athletic Performance Drip";
+
+      form.classList.add('hidden');
+      recommendationDiv.classList.remove('hidden');
+      resultText.textContent = `${drip} — Based on your responses, this drip offers the best support for your wellness goals.`;
+    });
+  </script>
+</body>
+</html>
